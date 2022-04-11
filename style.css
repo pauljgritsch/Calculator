@@ -1,0 +1,27 @@
+* {
+  border: 2px solid blue;
+  box-sizing: border-box;
+}
+
+.calcbody {
+  width: 320px;
+  height: 300px;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 72px);
+  grid-auto-rows: repeat(5, 60px);
+  border: 2px solid purple;
+  height: 90%;
+  gap: 5px;
+}
+
+#display {
+  width: 250px;
+  height: 30px;
+  background-color: lightblue;
+  align-self: center;
+}
