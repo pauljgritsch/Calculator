@@ -18,15 +18,6 @@ function updateDisplay() {
 
 updateDisplay()
 
-clear.addEventListener('click', () => {
-  displaynum = 0;
-  operator = null;
-  operand1 = null;
-  operand2 = null;
-  afterequals = false;
-  nextnum = false;
-  updateDisplay()
-})
 
 /* calculator functions */
 function add(num1, num2) {
@@ -60,7 +51,7 @@ function operate(operator, num1, num2) {
   }
 }
 
-
+// Add logic for number buttons
 numbers.forEach(button => button.addEventListener("click", () => {
   if (displaynum = 0 || nextnum) {
     displaynum = Number(button.id);
@@ -71,15 +62,17 @@ numbers.forEach(button => button.addEventListener("click", () => {
   }
   if (operand1) {
     operand2 = displaynum;
+    console.log('operand2:', operand2)
   }
   updateDisplay()
 }))
 
+// Add logic for operator buttons
 operators.forEach(button => button.addEventListener("click", () => {
   if (!operator) {
     operand1 = displaynum;
+    console.log('operand1:', operand1)
   } else if (!nextnum) {
-    operand2 = displaynum;
     operand1 = operate(operator, operand1, operand2);
     displaynum = operand1;
     updateDisplay()
@@ -88,17 +81,32 @@ operators.forEach(button => button.addEventListener("click", () => {
   operator = button.id;
 }))
 
-
-
+// Logic for equal button
 equal.addEventListener('click', () => {
-  console.log(operand1, operator, operand2, displaynum)
-  if (operator && operand2) {  
-      
+  if (operator && operand2) {
     nextnum = true;
     displaynum = operate(operator, operand1, operand2);
     operand1 = displaynum;
     updateDisplay()
-  } 
+  }
+  
+  // Easter egg if division by 0 is tried
+  if (operator === "/" && operand2 === 0) {
+    display.textContent = "DON'T DO THAT"
+  }
+
+  console.log('operand1:', operand1, 'operator:', operator, 'operand2:', operand2, 'displaynum:', displaynum)
+})
+
+// logic for clear button
+clear.addEventListener('click', () => {
+  displaynum = 0;
+  operator = null;
+  operand1 = null;
+  operand2 = null;
+  afterequals = false;
+  nextnum = false;
+  updateDisplay()
 })
 
 
