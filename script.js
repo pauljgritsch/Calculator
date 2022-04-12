@@ -2,59 +2,42 @@ const display = document.querySelector('#display')
 const numbers = document.querySelectorAll('.number')
 const operators = document.querySelectorAll('.operator')
 const equal = document.querySelector('.equals')
-let operator;
+const clear = document.querySelector('#c')
+let operator = null;
 let operand1 = 0;
-let operand2 = 0;
+let operand2;
+let displaynum = 0;
+
+let afterequals = false;
+let nextnum = false;
 const numsandops = document.querySelectorAll(".number, .operator")
 
-document.getElementById('c').addEventListener('click', () => display.textContent = '')
+function updateDisplay() {
+  display.textContent = displaynum.toString();
+}
 
-/*
-numbers.forEach(number => number.addEventListener('click', () => {
-  display.textContent += number.id
-}))
+updateDisplay()
 
-operators.forEach(button => button.addEventListener('click', () => {
-  operator = button.id;
-  console.log(operator)
-  operand1 = +display.textContent;
-  display.textContent = 'operator';
-}))
-
-equal.addEventListener('click', () => {
-  operand2 = +display.textContent
-  switch(operator) {
-    case ("+"):
-      display.textContent = operand1 + operand2;
-      break;
-    case ("-"):
-      display.textContent = operand1 - operand2;
-      break;
-    case ("*"):
-      display.textContent = operand1 * operand2;
-      break;
-    case ("/"):
-      display.textContent = operand1 / operand2
-      break;
-    default:
-      operand1 = display.textContent
-  }
+clear.addEventListener('click', () => {
+  displaynum = 0;
+  operator = null;
+  operand1 = null;
+  operand2 = null;
+  afterequals = false;
+  nextnum = false;
+  updateDisplay()
 })
-*/
 
 /* calculator functions */
 function add(num1, num2) {
   return num1 + num2
 }
-
 function subtract(num1, num2) {
   return num1 - num2
 }
-
 function multiply(num1, num2) {
   return num1 * num2
 }
-
 function divide(num1, num2) {
   return num1 / num2
 }
@@ -77,70 +60,44 @@ function operate(operator, num1, num2) {
   }
 }
 
-numsandops.forEach(button => button.addEventListener('click', () => {
-  display.textContent += button.id;
+numbers.forEach(button => button.addEventListener("click", () => {
+  if (displaynum == 0 || nextnum) {
+    nextnum = false;
+    display.textContent = button.id;
+  } 
+  else {
+    display.textContent += button.id;
+  }
+  displaynum = Number(display.textContent);
+  updateDisplay()
+}))
+
+operators.forEach(button => button.addEventListener("click", () => {
+  if (!operator) {
+    operand1 = displaynum;
+  } else {
+    operand1 = operate(operator, operand1, displaynum);
+    displaynum = operand1;
+    updateDisplay()
+  }
+  nextnum = true;
+  operator = button.id;
 }))
 
 equal.addEventListener('click', () => {
-  display.textContent = loopcalc(display.textContent)
+  if (operator) {
+    nextnum = true;
+    if (!operand2){
+      operand2 = displaynum;
+      displaynum = operate(operator, operand1, displaynum);
+      operand1 = displaynum;}
+    else {
+      displaynum = operate(operator, operand1, operand2)
+    }
+    updateDisplay()
+  }
 })
 
-function r(string) {
-  let regex = /(\d*)([+\-*\/])(\d*)/
-  let matches = string.match(regex)
-  console.log(matches)
-  if (matches[1]) {
-    operand1 = Number(matches[1])
-  }
-  if (matches[3]) {
-    operand2 = Number(matches[3])
-  }
-  switch (matches[2]) {
-    case '+':
-      return operand1 + operand2;
-    case '-':
-      return operand1 - operand2;
-    case '*':
-      return operand1 * operand2;
-    case '/':
-      return operand1 / operand2;
-  }
-}
 
-function loopcalc(string) {
-  let sections = [];
-  let operand;
-  let tempstring = '';
-  for (let char of string) {
-    if (/[\d.]/.test(char)) {
-      tempstring += char;
-    } else {
-      sections.push(tempstring);
-      sections.push(char);
-      tempstring = ''
-    }
-  }
-  sections.push(tempstring)
 
-  let result = +sections[0];
-  console.log(sections)
-  for (section of sections) {
-    if (!Number(section)) {
-      // console.log(section)
-      operand = section;
-      continue
-      }
-    
-    if (operand == "+") {
-      result += +section;
-    } else if (operand == "-") {
-      result -= section;
-    } else if (operand == "*") {
-      result *= section;
-    } else if (operand == "/") {
-      result /= section;
-    }
-    }
-    return result;
-  }
 
