@@ -60,23 +60,27 @@ function operate(operator, num1, num2) {
   }
 }
 
+
 numbers.forEach(button => button.addEventListener("click", () => {
-  if (displaynum == 0 || nextnum) {
+  if (displaynum = 0 || nextnum) {
+    displaynum = Number(button.id);
     nextnum = false;
-    display.textContent = button.id;
-  } 
-  else {
+  } else {
     display.textContent += button.id;
+    displaynum = Number(display.textContent)
   }
-  displaynum = Number(display.textContent);
+  if (operand1) {
+    operand2 = displaynum;
+  }
   updateDisplay()
 }))
 
 operators.forEach(button => button.addEventListener("click", () => {
   if (!operator) {
     operand1 = displaynum;
-  } else {
-    operand1 = operate(operator, operand1, displaynum);
+  } else if (!nextnum) {
+    operand2 = displaynum;
+    operand1 = operate(operator, operand1, operand2);
     displaynum = operand1;
     updateDisplay()
   }
@@ -84,18 +88,17 @@ operators.forEach(button => button.addEventListener("click", () => {
   operator = button.id;
 }))
 
+
+
 equal.addEventListener('click', () => {
-  if (operator) {
+  console.log(operand1, operator, operand2, displaynum)
+  if (operator && operand2) {  
+      
     nextnum = true;
-    if (!operand2){
-      operand2 = displaynum;
-      displaynum = operate(operator, operand1, displaynum);
-      operand1 = displaynum;}
-    else {
-      displaynum = operate(operator, operand1, operand2)
-    }
+    displaynum = operate(operator, operand1, operand2);
+    operand1 = displaynum;
     updateDisplay()
-  }
+  } 
 })
 
 
