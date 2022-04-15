@@ -1,4 +1,5 @@
-const display = document.querySelector('#display')
+const numdisplay = document.querySelector('#numdisplay')
+const calcdisplay = document.querySelector('#calcdisplay')
 const numbers = document.querySelectorAll('.number')
 const operators = document.querySelectorAll('.operator')
 const equal = document.querySelector('.equals')
@@ -13,7 +14,7 @@ let nextnum = false;
 const numsandops = document.querySelectorAll(".number, .operator")
 
 function updateDisplay() {
-  display.textContent = displaynum.toString();
+  numdisplay.textContent = displaynum.toString();
 }
 
 updateDisplay()
@@ -57,8 +58,8 @@ numbers.forEach(button => button.addEventListener("click", () => {
     displaynum = Number(button.id);
     nextnum = false;
   } else {
-    display.textContent += button.id;
-    displaynum = Number(display.textContent)
+    numdisplay.textContent += button.id;
+    displaynum = Number(numdisplay.textContent)
   }
   if (operand1) {
     operand2 = displaynum;
@@ -73,16 +74,19 @@ operators.forEach(button => button.addEventListener("click", () => {
     operand1 = displaynum;
     console.log('operand1:', operand1)
   } else if (!nextnum) {
-    operand1 = operate(operator, operand1, operand2);
-    displaynum = operand1;
-    updateDisplay()
+    // operand1 = operate(operator, operand1, operand2);
+    // displaynum = operand1;
+    // updateDisplay()
+    equals()
   }
   nextnum = true;
   operator = button.id;
+  calcdisplay.textContent = `${operand1} ${operator}`
 }))
 
+
 // Logic for equal button
-equal.addEventListener('click', () => {
+function equals() {
   if (operator && operand2) {
     nextnum = true;
     displaynum = operate(operator, operand1, operand2);
@@ -92,15 +96,23 @@ equal.addEventListener('click', () => {
   
   // Easter egg if division by 0 is tried
   if (operator === "/" && operand2 === 0) {
-    display.textContent = "DON'T DO THAT"
+    numdisplay.textContent = "DON'T DO THAT"
   }
-
   console.log('operand1:', operand1, 'operator:', operator, 'operand2:', operand2, 'displaynum:', displaynum)
+}
+
+equal.addEventListener('click', () =>{
+  if (!operand2) {
+    operand2 = displaynum;
+  }
+  calcdisplay.textContent = `${operand1} ${operator} ${operand2} =  ${operate(operator, operand1, operand2)}`
+  equals()
 })
 
 // logic for clear button
 clear.addEventListener('click', () => {
   displaynum = 0;
+  calcdisplay.textContent = ""
   operator = null;
   operand1 = null;
   operand2 = null;

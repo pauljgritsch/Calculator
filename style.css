@@ -20,8 +20,24 @@
 }
 
 #display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#numdisplay {
   width: 250px;
   height: 30px;
   background-color: lightblue;
   align-self: center;
+  text-align: right;
+}
+
+#calcdisplay {
+  width: 250px;
+  height: 20px;
+  background-color: rgb(204, 227, 235);
+  align-self: center;
+  text-align: right;
+  font-size: smaller;
 }
