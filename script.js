@@ -134,9 +134,6 @@ clear.addEventListener('click', () => {
 //backspace button
 backspace.addEventListener('click', () => {
   numdisplay.textContent = numdisplay.textContent.slice(0,-1)
-  if (!numdisplay.textContent) {
-    numdisplay.textContent = "0"
-  }
   displaynum = Number(numdisplay.textContent)
   operand1 = displaynum;
   updateDisplay()
