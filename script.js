@@ -4,6 +4,8 @@ const numbers = document.querySelectorAll('.number')
 const operators = document.querySelectorAll('.operator')
 const equal = document.querySelector('.equals')
 const clear = document.querySelector('#c')
+const backspace = document.querySelector("#backspace")
+
 let operator = null;
 let operand1 = 0;
 let operand2;
@@ -54,18 +56,24 @@ function operate(operator, num1, num2) {
 
 // Add logic for number buttons
 numbers.forEach(button => button.addEventListener("click", () => {
-  if (displaynum = 0 || nextnum) {
+  if (displaynum === 0 || nextnum) {
+    if (button.id == ".") {
+      numdisplay.textContent = "0" + button.id;
+    } else {numdisplay.textContent = button.id;}
     displaynum = Number(button.id);
     nextnum = false;
   } else {
     numdisplay.textContent += button.id;
     displaynum = Number(numdisplay.textContent)
+    console.log(displaynum)
   }
   if (operand1) {
     operand2 = displaynum;
     console.log('operand2:', operand2)
   }
-  updateDisplay()
+  if (numdisplay.textContent.includes(".")) {
+    document.getElementById(".").disabled = true;
+  }
 }))
 
 // Add logic for operator buttons
@@ -81,6 +89,7 @@ operators.forEach(button => button.addEventListener("click", () => {
   }
   nextnum = true;
   operator = button.id;
+  document.getElementById(".").disabled = false;
   calcdisplay.textContent = `${operand1} ${operator}`
 }))
 
@@ -106,6 +115,7 @@ equal.addEventListener('click', () =>{
     operand2 = displaynum;
   }
   calcdisplay.textContent = `${operand1} ${operator} ${operand2} =  ${operate(operator, operand1, operand2)}`
+  document.getElementById(".").disabled = false;
   equals()
 })
 
@@ -120,6 +130,19 @@ clear.addEventListener('click', () => {
   nextnum = false;
   updateDisplay()
 })
+
+//backspace button
+backspace.addEventListener('click', () => {
+  numdisplay.textContent = numdisplay.textContent.slice(0,-1)
+  if (!numdisplay.textContent) {
+    numdisplay.textContent = "0"
+  }
+  displaynum = Number(numdisplay.textContent)
+  operand1 = displaynum;
+  updateDisplay()
+})
+
+
 
 
 
