@@ -83,9 +83,6 @@ operators.forEach(button => button.addEventListener("click", () => {
     operand1 = displaynum;
     console.log('operand1:', operand1)
   } else if (!nextnum) {
-    // operand1 = operate(operator, operand1, operand2);
-    // displaynum = operand1;
-    // updateDisplay()
     equals()
   }
   nextnum = true;
