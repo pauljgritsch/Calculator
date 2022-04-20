@@ -140,6 +140,9 @@ backspace.addEventListener('click', () => {
   displaynum = Number(numdisplay.textContent)
   operand1 = displaynum;
   updateDisplay()
+  if (!numdisplay.textContent.includes(".")) {
+    document.getElementById(".").disabled = false;
+  }
 })
 
 
