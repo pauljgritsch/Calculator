@@ -16,7 +16,8 @@ let nextnum = false;
 const numsandops = document.querySelectorAll(".number, .operator")
 
 function updateDisplay() {
-  numdisplay.textContent = displaynum.toString();
+  const output = displaynum.toString()
+  numdisplay.textContent = output;
 }
 
 updateDisplay()
@@ -110,7 +111,7 @@ function equals() {
   console.log('operand1:', operand1, 'operator:', operator, 'operand2:', operand2, 'displaynum:', displaynum)
 }
 
-equal.addEventListener('click', () =>{
+equal.addEventListener('click', () => {
   if (!operand2) {
     operand2 = displaynum;
   }
@@ -142,8 +143,68 @@ backspace.addEventListener('click', () => {
   }
 })
 
-
-
+// add keyboard support  Should make event listeners up top into functions to reduce repeated code
+document.addEventListener('keydown', button => {
+  if ("0123456789.".includes(button.key)) {
+    if (displaynum === 0 || nextnum) {
+      if (button.key == ".") {
+        numdisplay.textContent = "0" + button.key;
+      } else {numdisplay.textContent = button.key;}
+      displaynum = Number(button.key);
+      nextnum = false;
+    } else {
+      numdisplay.textContent += button.key;
+      displaynum = Number(numdisplay.textContent)
+      console.log(displaynum)
+    }
+    if (operand1) {
+      operand2 = displaynum;
+      console.log('operand2:', operand2)
+    }
+    if (numdisplay.textContent.includes(".")) {
+      document.getElementById(".").disabled = true;
+    }
+  }
+  else if ("+-*/".includes(button.key)) {
+    if (!operator) {
+      operand1 = displaynum;
+      console.log('operand1:', operand1)
+    } else if (!nextnum) {
+      equals()
+    }
+    nextnum = true;
+    operator = button.key;
+    document.getElementById(".").disabled = false;
+    calcdisplay.textContent = `${operand1} ${operator}`
+  }
+  else if (button.key === "Enter") {
+    if (!operand2) {
+      operand2 = displaynum;
+    }
+    calcdisplay.textContent = `${operand1} ${operator} ${operand2} =  ${operate(operator, operand1, operand2)}`
+    document.getElementById(".").disabled = false;
+    equals()
+  }
+  else if (button.key === "Backspace") {
+    numdisplay.textContent = numdisplay.textContent.slice(0,-1)
+    displaynum = Number(numdisplay.textContent)
+    operand1 = displaynum;
+    updateDisplay()
+    if (!numdisplay.textContent.includes(".")) {
+      document.getElementById(".").disabled = false;
+    }
+  }
+  else if (button.key === "c" || button.key === "Delete") {
+    displaynum = 0;
+    calcdisplay.textContent = ""
+    operator = null;
+    operand1 = null;
+    operand2 = null;
+    afterequals = false;
+    nextnum = false;
+    updateDisplay()
+  }
+})
 
 
 
